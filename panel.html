@@ -11,27 +11,38 @@
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
         .container {
             display: none;
             margin-top: 50px;
+            transition: opacity 0.3s ease-in-out;
         }
         .login {
             margin-top: 100px;
         }
-        input {
+        input, button {
             padding: 10px;
             border-radius: 5px;
             border: none;
             margin: 5px;
+            font-size: 16px;
+        }
+        input:focus, button:focus {
+            outline: none;
+        }
+        input {
+            width: 250px;
         }
         button {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
             cursor: pointer;
             background-color: #7289da;
             color: white;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #5a6a91;
         }
         .panel {
             display: flex;
@@ -49,6 +60,10 @@
             color: white;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #5a6a91;
         }
         .status-box {
             margin-top: 20px;
@@ -66,21 +81,38 @@
             justify-content: center;
             gap: 10px;
         }
+        /* Animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        /* Responsiveness */
+        @media (max-width: 600px) {
+            input, .btn {
+                width: 80%;
+            }
+            .panel {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="login">
         <h2>Staff Panel Login</h2>
-        <input type="text" id="username" placeholder="Enter Username">
-        <input type="password" id="password" placeholder="Enter Code">
+        <input type="text" id="username" placeholder="Enter Username" aria-label="Enter your username">
+        <input type="password" id="password" placeholder="Enter Code" aria-label="Enter your password">
         <button onclick="login()">Login</button>
     </div>
 
-    <div class="container" id="panel">
+    <div class="container" id="panel" class="fade-in">
         <h1>Welcome, <span id="userDisplay">Ant</span></h1>
-        <img id="pfp" src="" alt="Profile Picture" width="100" height="100" style="border-radius: 50%;">
+        <img id="pfp" src="" alt="Profile Picture" width="100" height="100" style="border-radius: 50%; margin-bottom: 20px;">
         <div class="user-input">
-            <input type="text" id="targetUser" placeholder="Enter target username">
+            <input type="text" id="targetUser" placeholder="Enter target username" aria-label="Enter target username">
         </div>
         <div class="panel">
             <div class="button-group">
@@ -108,7 +140,7 @@
         function login() {
             const username = document.getElementById("username").value;
             const code = document.getElementById("password").value;
-            if (code === "420024" && username.trim() !== "") {
+            if (code === "832952385923" && username.trim() !== "") {
                 document.querySelector(".login").style.display = "none";
                 document.getElementById("panel").style.display = "block";
                 document.getElementById("userDisplay").innerText = username;
