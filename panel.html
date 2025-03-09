@@ -94,7 +94,6 @@
             <button class="btn" onclick="fakeAction('chat')">Staff Communication</button>
             <button class="btn" onclick="fakeAction('server')">Server Controls</button>
             <button class="btn" onclick="fakeAction('report')">View Reports</button>
-            <button class="btn" onclick="logout()">Logout</button> <!-- Logout button -->
         </div>
         <div class="status-box" id="status-box">
             <h3>Action Log</h3>
@@ -109,7 +108,7 @@
         function login() {
             const username = document.getElementById("username").value;
             const code = document.getElementById("password").value;
-            if (code === "420024" && username.trim() !== "") {
+            if (code === "832952385923" && username.trim() !== "") {
                 document.querySelector(".login").style.display = "none";
                 document.getElementById("panel").style.display = "block";
                 document.getElementById("userDisplay").innerText = username;
@@ -139,14 +138,6 @@
             
             document.getElementById("status").innerText = messages[action];
             document.getElementById("targetUser").value = ""; // Reset input field
-        }
-
-        // Logout function
-        function logout() {
-            document.querySelector(".login").style.display = "block";  // Show login screen
-            document.getElementById("panel").style.display = "none";  // Hide staff panel
-            document.getElementById("username").value = "";  // Clear username input
-            document.getElementById("password").value = "";  // Clear password input
         }
     </script>
 </body>
