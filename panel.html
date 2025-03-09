@@ -6,66 +6,15 @@
     <title>Rivals Staff Panel</title>
     <link rel="icon" href="https://tr.rbxcdn.com/180DAY-bc5d176a7555b4c0f673b9b85e98a999/150/150/Image/Webp/noFilter" type="image/png">
     <style>
-        body {
-            background-color: #2c2f33;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .container {
-            display: none;
-            margin-top: 50px;
-        }
-        .login {
-            margin-top: 100px;
-        }
-        input {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            margin: 5px;
-        }
-        button {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            background-color: #7289da;
-            color: white;
-        }
-        .panel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .btn {
-            width: 200px;
-            margin: 10px;
-            padding: 15px;
-            background-color: #7289da;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .status-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #23272a;
-            border-radius: 10px;
-            width: 300px;
-            text-align: left;
-        }
-        .user-input {
-            margin-bottom: 20px;
-        }
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
+        body { background-color: #2c2f33; color: white; font-family: Arial, sans-serif; text-align: center; }
+        .container { display: none; margin-top: 50px; }
+        .login { margin-top: 100px; }
+        input, button { padding: 10px; border-radius: 5px; border: none; margin: 5px; }
+        button { background-color: #7289da; color: white; cursor: pointer; }
+        .panel { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        .btn { width: 200px; margin: 10px; padding: 15px; background-color: #7289da; border-radius: 10px; font-size: 16px; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #23272a; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .popup button { margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -78,34 +27,24 @@
 
     <div class="container" id="panel">
         <h1>Welcome, <span id="userDisplay">Ant</span></h1>
-        <img id="pfp" src="" alt="Profile Picture" width="100" height="100" style="border-radius: 50%;">
-        <div class="user-input">
-            <input type="text" id="targetUser" placeholder="Enter target username">
-        </div>
+        <input type="text" id="targetUser" placeholder="Enter target username">
         <div class="panel">
-            <div class="button-group">
-                <button class="btn" onclick="fakeAction('permban')">Permanent Ban</button>
-                <button class="btn" onclick="fakeAction('reportban')">Report Ban</button>
-                <button class="btn" onclick="fakeAction('affban')">Affiliate Ban (30 days)</button>
-            </div>
-            <button class="btn" onclick="fakeAction('unban')">Unban User</button>
-            <button class="btn" onclick="fakeAction('kick')">Kick User</button>
-            <button class="btn" onclick="fakeAction('logs')">View Logs</button>
-            <button class="btn" onclick="fakeAction('chat')">Staff Communication</button>
-            <button class="btn" onclick="fakeAction('server')">Server Controls</button>
-            <button class="btn" onclick="fakeAction('report')">View Reports</button>
-            <button class="btn" onclick="logout()">Logout</button> <!-- Logout button -->
-        </div>
-        <div class="status-box" id="status-box">
-            <h3>Action Log</h3>
-            <p id="status">No actions performed yet.</p>
+            <button class="btn" onclick="showPopup('ban')">Permanent Ban</button>
+            <button class="btn" onclick="showPopup('kick')">Kick User</button>
+            <button class="btn" onclick="showPopup('logs')">View Logs</button>
+            <button class="btn" onclick="showPopup('chat')">Staff Communication</button>
+            <button class="btn" onclick="showPopup('server')">Server Controls</button>
+            <button class="btn" onclick="showPopup('report')">View Reports</button>
         </div>
     </div>
 
+    <div id="popup" class="popup">
+        <p id="popupMessage"></p>
+        <input type="text" id="banNote" placeholder="Enter a note (if applicable)" style="display:none;">
+        <button onclick="closePopup()">Close</button>
+    </div>
+
     <script>
-        const pfpUrl = "https://images-ext-1.discordapp.net/external/fr8u39_DKpUDiozbL0K7iZQBN-ZcQu-q1DA4rGBzfwo/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/530905111145218069/a_be4c10d2c52d94244703d93a17463a24.gif"; // Change to your custom PFP link
-        document.getElementById("pfp").src = pfpUrl;
-        
         function login() {
             const username = document.getElementById("username").value;
             const code = document.getElementById("password").value;
@@ -117,36 +56,45 @@
                 alert("Incorrect Code or Username");
             }
         }
-        
-        function fakeAction(action) {
+
+        function showPopup(action) {
             const targetUser = document.getElementById("targetUser").value;
-            if (targetUser.trim() === "") {
-                alert("Please enter a username to perform this action.");
+            let message = "";
+            document.getElementById("banNote").style.display = "none";
+            
+            if (targetUser.trim() === "" && action !== "chat") {
+                alert("Please enter a username.");
                 return;
             }
-            
-            const messages = {
-                "permban": `${targetUser} has been permanently banned successfully.`,
-                "reportban": `${targetUser} has been banned for reported violations.`,
-                "affban": `${targetUser} has been banned for 30 days due to affiliate violations.`,
-                "unban": `${targetUser} has been unbanned successfully.`,
-                "kick": `${targetUser} has been kicked from the server.`,
-                "logs": "Displaying recent staff logs...",
-                "chat": "Accessing staff communication center...",
-                "server": "Opening server control panel...",
-                "report": "Displaying latest user reports..."
-            };
-            
-            document.getElementById("status").innerText = messages[action];
-            document.getElementById("targetUser").value = ""; // Reset input field
+
+            switch(action) {
+                case "ban":
+                    message = `Ban ${targetUser}? Add a note:`;
+                    document.getElementById("banNote").style.display = "block";
+                    break;
+                case "kick":
+                    message = "This user is not in a game with a staff account.";
+                    break;
+                case "logs":
+                    message = `No logs found for user ${targetUser}.`;
+                    break;
+                case "chat":
+                    message = "No messages yet, start here.";
+                    break;
+                case "server":
+                    message = "This user is not in a game with a staff account.";
+                    break;
+                case "report":
+                    message = "No reports have been made for this user.";
+                    break;
+            }
+
+            document.getElementById("popupMessage").innerText = message;
+            document.getElementById("popup").style.display = "block";
         }
 
-        // Logout function
-        function logout() {
-            document.querySelector(".login").style.display = "block";  // Show login screen
-            document.getElementById("panel").style.display = "none";  // Hide staff panel
-            document.getElementById("username").value = "";  // Clear username input
-            document.getElementById("password").value = "";  // Clear password input
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
         }
     </script>
 </body>
