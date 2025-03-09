@@ -6,95 +6,119 @@
     <title>Rivals Staff Panel</title>
     <link rel="icon" href="https://tr.rbxcdn.com/180DAY-bc5d176a7555b4c0f673b9b85e98a999/150/150/Image/Webp/noFilter" type="image/png">
     <style>
-        body { background-color: #2c2f33; color: white; font-family: Arial, sans-serif; text-align: center; }
-        .container { display: none; margin-top: 50px; }
-        .login { margin-top: 100px; }
-        input, button { padding: 10px; border-radius: 5px; border: none; margin: 5px; }
-        button { background-color: #7289da; color: white; cursor: pointer; }
-        .panel { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-        .btn { width: 200px; margin: 10px; padding: 15px; background-color: #7289da; border-radius: 10px; font-size: 16px; }
-        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #23272a; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        .popup button { margin-top: 10px; }
+        body {
+            background-color: #2c2f33;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            display: none;
+            margin-top: 50px;
+        }
+        .login {
+            margin-top: 100px;
+        }
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin: 5px;
+        }
+        button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: #7289da;
+            color: white;
+        }
+        .panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .btn {
+            width: 200px;
+            margin: 10px;
+            padding: 15px;
+            background-color: #7289da;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #23272a;
+            border-radius: 10px;
+            width: 300px;
+            text-align: left;
+        }
+        .user-input {
+            margin-bottom: 20px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #2c2f33;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
     </style>
 </head>
 <body>
-    <div class="login">
-        <h2>Staff Panel Login</h2>
-        <input type="text" id="username" placeholder="Enter Username">
-        <input type="password" id="password" placeholder="Enter Code">
-        <button onclick="login()">Login</button>
+    <div class="panel">
+        <button class="btn" onclick="openBanModal()">Ban User</button>
     </div>
-
-    <div class="container" id="panel">
-        <h1>Welcome, <span id="userDisplay">Ant</span></h1>
-        <input type="text" id="targetUser" placeholder="Enter target username">
-        <div class="panel">
-            <button class="btn" onclick="showPopup('ban')">Permanent Ban</button>
-            <button class="btn" onclick="showPopup('kick')">Kick User</button>
-            <button class="btn" onclick="showPopup('logs')">View Logs</button>
-            <button class="btn" onclick="showPopup('chat')">Staff Communication</button>
-            <button class="btn" onclick="showPopup('server')">Server Controls</button>
-            <button class="btn" onclick="showPopup('report')">View Reports</button>
+    
+    <div id="banModal" class="modal">
+        <div class="modal-content">
+            <h3>Enter Ban Note</h3>
+            <input type="text" id="banNote" placeholder="Enter reason for ban">
+            <br><br>
+            <button onclick="confirmBan()">Confirm</button>
+            <button onclick="closeBanModal()">Cancel</button>
         </div>
     </div>
 
-    <div id="popup" class="popup">
-        <p id="popupMessage"></p>
-        <input type="text" id="banNote" placeholder="Enter a note (if applicable)" style="display:none;">
-        <button onclick="closePopup()">Close</button>
-    </div>
-
     <script>
-        function login() {
-            const username = document.getElementById("username").value;
-            const code = document.getElementById("password").value;
-            if (code === "420024" && username.trim() !== "") {
-                document.querySelector(".login").style.display = "none";
-                document.getElementById("panel").style.display = "block";
-                document.getElementById("userDisplay").innerText = username;
-            } else {
-                alert("Incorrect Code or Username");
-            }
+        function openBanModal() {
+            document.getElementById('banModal').style.display = 'flex';
         }
 
-        function showPopup(action) {
-            const targetUser = document.getElementById("targetUser").value;
-            let message = "";
-            document.getElementById("banNote").style.display = "none";
-            
-            if (targetUser.trim() === "" && action !== "chat") {
-                alert("Please enter a username.");
+        function closeBanModal() {
+            document.getElementById('banModal').style.display = 'none';
+        }
+
+        function confirmBan() {
+            let note = document.getElementById('banNote').value;
+            if (note.trim() === "") {
+                alert("Please enter a reason for the ban.");
                 return;
             }
-
-            switch(action) {
-                case "ban":
-                    message = `Ban ${targetUser}? Add a note:`;
-                    document.getElementById("banNote").style.display = "block";
-                    break;
-                case "kick":
-                    message = "This user is not in a game with a staff account.";
-                    break;
-                case "logs":
-                    message = `No logs found for user ${targetUser}.`;
-                    break;
-                case "chat":
-                    message = "No messages yet, start here.";
-                    break;
-                case "server":
-                    message = "This user is not in a game with a staff account.";
-                    break;
-                case "report":
-                    message = "No reports have been made for this user.";
-                    break;
-            }
-
-            document.getElementById("popupMessage").innerText = message;
-            document.getElementById("popup").style.display = "block";
-        }
-
-        function closePopup() {
-            document.getElementById("popup").style.display = "none";
+            alert("User banned with note: " + note);
+            closeBanModal();
         }
     </script>
 </body>
