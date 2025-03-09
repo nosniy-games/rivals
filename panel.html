@@ -94,6 +94,7 @@
             <button class="btn" onclick="fakeAction('chat')">Staff Communication</button>
             <button class="btn" onclick="fakeAction('server')">Server Controls</button>
             <button class="btn" onclick="fakeAction('report')">View Reports</button>
+            <button class="btn" onclick="logout()">Logout</button> <!-- Logout button -->
         </div>
         <div class="status-box" id="status-box">
             <h3>Action Log</h3>
@@ -125,11 +126,11 @@
             }
             
             const messages = {
-                "permban": ${targetUser} has been permanently banned successfully.,
-                "reportban": ${targetUser} has been banned for reported violations.,
-                "affban": ${targetUser} has been banned for 30 days due to affiliate violations.,
-                "unban": ${targetUser} has been unbanned successfully.,
-                "kick": ${targetUser} has been kicked from the server.,
+                "permban": `${targetUser} has been permanently banned successfully.`,
+                "reportban": `${targetUser} has been banned for reported violations.`,
+                "affban": `${targetUser} has been banned for 30 days due to affiliate violations.`,
+                "unban": `${targetUser} has been unbanned successfully.`,
+                "kick": `${targetUser} has been kicked from the server.`,
                 "logs": "Displaying recent staff logs...",
                 "chat": "Accessing staff communication center...",
                 "server": "Opening server control panel...",
@@ -138,6 +139,14 @@
             
             document.getElementById("status").innerText = messages[action];
             document.getElementById("targetUser").value = ""; // Reset input field
+        }
+
+        // Logout function
+        function logout() {
+            document.querySelector(".login").style.display = "block";  // Show login screen
+            document.getElementById("panel").style.display = "none";  // Hide staff panel
+            document.getElementById("username").value = "";  // Clear username input
+            document.getElementById("password").value = "";  // Clear password input
         }
     </script>
 </body>
