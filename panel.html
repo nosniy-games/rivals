@@ -146,6 +146,28 @@
             }
         }
         
+        function confirmBan(banType) {
+            let banMessage = "";
+            switch(banType) {
+                case 'permban':
+                    banMessage = "Are you sure you want to permanently ban this user?";
+                    break;
+                case 'reportban':
+                    banMessage = "Are you sure you want to apply a report ban to this user?";
+                    break;
+                case 'affban':
+                    banMessage = "Are you sure you want to apply a 30-day affiliate ban?";
+                    break;
+                default:
+                    banMessage = "Are you sure you want to ban this user?";
+            }
+            showPopup(banMessage);
+        }
+
+        function fakeAction(action) {
+            showPopup(`${action} action clicked.`);
+        }
+
         function kickUser() {
             showPopup("This user is not in a game with a staff account.");
         }
