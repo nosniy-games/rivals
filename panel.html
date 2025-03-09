@@ -66,6 +66,29 @@
             justify-content: center;
             gap: 10px;
         }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2c2f33;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 1000;
+        }
+        .popup button {
+            margin-top: 10px;
+            background-color: #7289da;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -90,7 +113,7 @@
             </div>
             <button class="btn" onclick="fakeAction('unban')">Unban User</button>
             <button class="btn" onclick="kickUser()">Kick User</button>
-            <button class="btn" onclick="fakeAction('logs')">View Logs</button>
+            <button class="btn" onclick="viewLogs()">View Logs</button>
             <button class="btn" onclick="fakeAction('chat')">Staff Communication</button>
             <button class="btn" onclick="fakeAction('server')">Server Controls</button>
             <button class="btn" onclick="fakeAction('report')">View Reports</button>
@@ -100,6 +123,11 @@
             <h3>Action Log</h3>
             <p id="status">No actions performed yet.</p>
         </div>
+    </div>
+
+    <div id="popup" class="popup">
+        <p id="popup-text"></p>
+        <button onclick="closePopup()">OK</button>
     </div>
 
     <script>
@@ -118,27 +146,22 @@
             }
         }
         
-        function confirmBan(action) {
-            const targetUser = document.getElementById("targetUser").value;
-            if (targetUser.trim() === "") {
-                alert("Please enter a username to perform this action.");
-                return;
-            }
-            const note = prompt("Enter a note for this ban:");
-            if (note !== null && note.trim() !== "") {
-                fakeAction(action, note);
-            } else {
-                alert("Ban action canceled. A note is required.");
-            }
+        function kickUser() {
+            showPopup("This user is not in a game with a staff account.");
         }
         
-        function kickUser() {
+        function viewLogs() {
             const targetUser = document.getElementById("targetUser").value;
-            if (targetUser.trim() === "") {
-                alert("Please enter a username to perform this action.");
-                return;
-            }
-            alert("This user is not in a game with a staff account.");
+            showPopup(`No logs found for user ${targetUser}`);
+        }
+
+        function showPopup(message) {
+            document.getElementById("popup-text").innerText = message;
+            document.getElementById("popup").style.display = "block";
+        }
+        
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
         }
 
         function logout() {
