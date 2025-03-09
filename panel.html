@@ -73,7 +73,7 @@
         <h2>Staff Panel Login</h2>
         <input type="text" id="username" placeholder="Enter Username">
         <input type="password" id="password" placeholder="Enter Code">
-        <button onclick="login()">Login</button>
+        <button onclick="securedLogin()">Login</button>
     </div>
 
     <div class="container" id="panel">
@@ -84,17 +84,17 @@
         </div>
         <div class="panel">
             <div class="button-group">
-                <button class="btn" onclick="fakeAction('permban')">Permanent Ban</button>
-                <button class="btn" onclick="fakeAction('reportban')">Report Ban</button>
-                <button class="btn" onclick="fakeAction('affban')">Affiliate Ban (30 days)</button>
+                <button class="btn" onclick="securedAction('permban')">Permanent Ban</button>
+                <button class="btn" onclick="securedAction('reportban')">Report Ban</button>
+                <button class="btn" onclick="securedAction('affban')">Affiliate Ban (30 days)</button>
             </div>
-            <button class="btn" onclick="fakeAction('unban')">Unban User</button>
-            <button class="btn" onclick="fakeAction('kick')">Kick User</button>
-            <button class="btn" onclick="fakeAction('logs')">View Logs</button>
-            <button class="btn" onclick="fakeAction('chat')">Staff Communication</button>
-            <button class="btn" onclick="fakeAction('server')">Server Controls</button>
-            <button class="btn" onclick="fakeAction('report')">View Reports</button>
-            <button class="btn" onclick="logout()">Logout</button> <!-- Logout button -->
+            <button class="btn" onclick="securedAction('unban')">Unban User</button>
+            <button class="btn" onclick="securedAction('kick')">Kick User</button>
+            <button class="btn" onclick="securedAction('logs')">View Logs</button>
+            <button class="btn" onclick="securedAction('chat')">Staff Communication</button>
+            <button class="btn" onclick="securedAction('server')">Server Controls</button>
+            <button class="btn" onclick="securedAction('report')">View Reports</button>
+            <button class="btn" onclick="logout()">Logout</button>
         </div>
         <div class="status-box" id="status-box">
             <h3>Action Log</h3>
@@ -103,10 +103,10 @@
     </div>
 
     <script>
-        const pfpUrl = "https://images-ext-1.discordapp.net/external/fr8u39_DKpUDiozbL0K7iZQBN-ZcQu-q1DA4rGBzfwo/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/530905111145218069/a_be4c10d2c52d94244703d93a17463a24.gif"; // Change to your custom PFP link
+        const pfpUrl = "https://cdn.discordapp.com/avatars/530905111145218069/a_be4c10d2c52d94244703d93a17463a24.gif";
         document.getElementById("pfp").src = pfpUrl;
-        
-        function login() {
+
+        function securedLogin() {
             const username = document.getElementById("username").value;
             const code = document.getElementById("password").value;
             if (code === "420024" && username.trim() !== "") {
@@ -117,36 +117,36 @@
                 alert("Incorrect Code or Username");
             }
         }
-        
-        function fakeAction(action) {
+
+        function securedAction(action) {
             const targetUser = document.getElementById("targetUser").value;
             if (targetUser.trim() === "") {
                 alert("Please enter a username to perform this action.");
                 return;
             }
             
-            const messages = {
-                "permban": `${targetUser} has been permanently banned successfully.`,
-                "reportban": `${targetUser} has been banned for reported violations.`,
-                "affban": `${targetUser} has been banned for 30 days due to affiliate violations.`,
-                "unban": `${targetUser} has been unbanned successfully.`,
-                "kick": `${targetUser} has been kicked from the server.`,
-                "logs": "Displaying recent staff logs...",
-                "chat": "Accessing staff communication center...",
-                "server": "Opening server control panel...",
-                "report": "Displaying latest user reports..."
-            };
-            
-            document.getElementById("status").innerText = messages[action];
-            document.getElementById("targetUser").value = ""; // Reset input field
+            setTimeout(() => {
+                const messages = {
+                    "permban": `${targetUser} has been permanently banned successfully.`,
+                    "reportban": `${targetUser} has been banned for reported violations.`,
+                    "affban": `${targetUser} has been banned for 30 days due to affiliate violations.`,
+                    "unban": `${targetUser} has been unbanned successfully.`,
+                    "kick": `${targetUser} has been kicked from the server.`,
+                    "logs": "Displaying recent staff logs...",
+                    "chat": "Accessing staff communication center...",
+                    "server": "Opening server control panel...",
+                    "report": "Displaying latest user reports..."
+                };
+                document.getElementById("status").innerText = messages[action];
+                document.getElementById("targetUser").value = "";
+            }, 1000);
         }
 
-        // Logout function
         function logout() {
-            document.querySelector(".login").style.display = "block";  // Show login screen
-            document.getElementById("panel").style.display = "none";  // Hide staff panel
-            document.getElementById("username").value = "";  // Clear username input
-            document.getElementById("password").value = "";  // Clear password input
+            document.querySelector(".login").style.display = "block";
+            document.getElementById("panel").style.display = "none";
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
         }
     </script>
 </body>
