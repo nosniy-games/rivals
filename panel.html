@@ -57,6 +57,8 @@
             border-radius: 10px;
             width: 300px;
             text-align: left;
+            overflow-y: auto;
+            max-height: 200px;
         }
         .user-input {
             margin-bottom: 20px;
@@ -142,7 +144,7 @@
     <script>
         const pfpUrl = "https://images-ext-1.discordapp.net/external/fr8u39_DKpUDiozbL0K7iZQBN-ZcQu-q1DA4rGBzfwo/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/530905111145218069/a_be4c10d2c52d94244703d93a17463a24.gif";
         document.getElementById("pfp").src = pfpUrl;
-        
+
         function login() {
             const username = document.getElementById("username").value;
             const code = document.getElementById("password").value;
@@ -162,7 +164,10 @@
 
         function confirmBanAction() {
             const note = document.getElementById("banNote").value;
+            const targetUser = document.getElementById("targetUser").value;
+
             if (note.trim() !== "") {
+                addLogEntry(`${targetUser} has been ${document.getElementById("popup-text").innerText.toLowerCase()} - Reason: ${note}`);
                 alert(`Ban Confirmed: ${note}`);
                 closePopup();
             } else {
@@ -171,19 +176,33 @@
         }
 
         function kickUser() {
+            const targetUser = document.getElementById("targetUser").value;
+            addLogEntry(`${targetUser} was kicked.`);
             showPopup("This user is not in a game with a staff account.");
         }
 
         function viewLogs() {
             const targetUser = document.getElementById("targetUser").value;
+            addLogEntry(`No logs found for user ${targetUser}`);
             showPopup(`No logs found for user ${targetUser}`);
+        }
+
+        function addLogEntry(logText) {
+            const logContainer = document.getElementById("status");
+            const newLogEntry = document.createElement("p");
+            newLogEntry.innerText = logText;
+            logContainer.appendChild(newLogEntry);
+
+            // Ensure the log box scrolls down as new entries are added
+            const statusBox = document.getElementById("status-box");
+            statusBox.scrollTop = statusBox.scrollHeight;
         }
 
         function showPopup(message) {
             document.getElementById("popup-text").innerText = message;
             document.getElementById("popup").style.display = "block";
         }
-        
+
         function closePopup() {
             document.getElementById("popup").style.display = "none";
         }
