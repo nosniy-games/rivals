@@ -84,9 +84,9 @@
         </div>
         <div class="panel">
             <div class="button-group">
-                <button class="btn" onclick="fakeAction('permban')">Permanent Ban</button>
-                <button class="btn" onclick="fakeAction('reportban')">Report Ban</button>
-                <button class="btn" onclick="fakeAction('affban')">Affiliate Ban (30 days)</button>
+                <button class="btn" onclick="confirmBan('permban')">Permanent Ban</button>
+                <button class="btn" onclick="confirmBan('reportban')">Report Ban</button>
+                <button class="btn" onclick="confirmBan('affban')">Affiliate Ban (30 days)</button>
             </div>
             <button class="btn" onclick="fakeAction('unban')">Unban User</button>
             <button class="btn" onclick="fakeAction('kick')">Kick User</button>
@@ -94,7 +94,7 @@
             <button class="btn" onclick="fakeAction('chat')">Staff Communication</button>
             <button class="btn" onclick="fakeAction('server')">Server Controls</button>
             <button class="btn" onclick="fakeAction('report')">View Reports</button>
-            <button class="btn" onclick="logout()">Logout</button> <!-- Logout button -->
+            <button class="btn" onclick="logout()">Logout</button>
         </div>
         <div class="status-box" id="status-box">
             <h3>Action Log</h3>
@@ -103,7 +103,7 @@
     </div>
 
     <script>
-        const pfpUrl = "https://images-ext-1.discordapp.net/external/fr8u39_DKpUDiozbL0K7iZQBN-ZcQu-q1DA4rGBzfwo/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/530905111145218069/a_be4c10d2c52d94244703d93a17463a24.gif"; // Change to your custom PFP link
+        const pfpUrl = "https://images-ext-1.discordapp.net/external/fr8u39_DKpUDiozbL0K7iZQBN-ZcQu-q1DA4rGBzfwo/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/530905111145218069/a_be4c10d2c52d94244703d93a17463a24.gif";
         document.getElementById("pfp").src = pfpUrl;
         
         function login() {
@@ -118,7 +118,21 @@
             }
         }
         
-        function fakeAction(action) {
+        function confirmBan(action) {
+            const targetUser = document.getElementById("targetUser").value;
+            if (targetUser.trim() === "") {
+                alert("Please enter a username to perform this action.");
+                return;
+            }
+            const note = prompt("Enter a note for this ban:");
+            if (note !== null && note.trim() !== "") {
+                fakeAction(action, note);
+            } else {
+                alert("Ban action canceled. A note is required.");
+            }
+        }
+        
+        function fakeAction(action, note = "No note provided") {
             const targetUser = document.getElementById("targetUser").value;
             if (targetUser.trim() === "") {
                 alert("Please enter a username to perform this action.");
@@ -126,9 +140,9 @@
             }
             
             const messages = {
-                "permban": `${targetUser} has been permanently banned successfully.`,
-                "reportban": `${targetUser} has been banned for reported violations.`,
-                "affban": `${targetUser} has been banned for 30 days due to affiliate violations.`,
+                "permban": `${targetUser} has been permanently banned. Note: ${note}`,
+                "reportban": `${targetUser} has been banned for reported violations. Note: ${note}`,
+                "affban": `${targetUser} has been banned for 30 days due to affiliate violations. Note: ${note}`,
                 "unban": `${targetUser} has been unbanned successfully.`,
                 "kick": `${targetUser} has been kicked from the server.`,
                 "logs": "Displaying recent staff logs...",
@@ -138,15 +152,14 @@
             };
             
             document.getElementById("status").innerText = messages[action];
-            document.getElementById("targetUser").value = ""; // Reset input field
+            document.getElementById("targetUser").value = "";
         }
 
-        // Logout function
         function logout() {
-            document.querySelector(".login").style.display = "block";  // Show login screen
-            document.getElementById("panel").style.display = "none";  // Hide staff panel
-            document.getElementById("username").value = "";  // Clear username input
-            document.getElementById("password").value = "";  // Clear password input
+            document.querySelector(".login").style.display = "block";
+            document.getElementById("panel").style.display = "none";
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
         }
     </script>
 </body>
