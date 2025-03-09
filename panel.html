@@ -89,6 +89,13 @@
             color: white;
             cursor: pointer;
         }
+        .note-input {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            width: 100%;
+            height: 50px;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +134,9 @@
 
     <div id="popup" class="popup">
         <p id="popup-text"></p>
-        <button onclick="closePopup()">OK</button>
+        <textarea id="banNote" class="note-input" placeholder="Enter a reason for the ban..."></textarea>
+        <button onclick="confirmBanAction()">Confirm Ban</button>
+        <button onclick="closePopup()">Cancel</button>
     </div>
 
     <script>
@@ -145,33 +154,26 @@
                 alert("Incorrect Code or Username");
             }
         }
-        
+
         function confirmBan(banType) {
-            let banMessage = "";
-            switch(banType) {
-                case 'permban':
-                    banMessage = "Are you sure you want to permanently ban this user?";
-                    break;
-                case 'reportban':
-                    banMessage = "Are you sure you want to apply a report ban to this user?";
-                    break;
-                case 'affban':
-                    banMessage = "Are you sure you want to apply a 30-day affiliate ban?";
-                    break;
-                default:
-                    banMessage = "Are you sure you want to ban this user?";
-            }
-            showPopup(banMessage);
+            document.getElementById("popup-text").innerText = `Are you sure you want to ${banType} this user?`;
+            document.getElementById("popup").style.display = "block";
         }
 
-        function fakeAction(action) {
-            showPopup(`${action} action clicked.`);
+        function confirmBanAction() {
+            const note = document.getElementById("banNote").value;
+            if (note.trim() !== "") {
+                alert(`Ban Confirmed: ${note}`);
+                closePopup();
+            } else {
+                alert("Please provide a reason for the ban.");
+            }
         }
 
         function kickUser() {
             showPopup("This user is not in a game with a staff account.");
         }
-        
+
         function viewLogs() {
             const targetUser = document.getElementById("targetUser").value;
             showPopup(`No logs found for user ${targetUser}`);
