@@ -89,6 +89,13 @@
             color: white;
             cursor: pointer;
         }
+        .popup input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -125,34 +132,32 @@
         </div>
     </div>
 
-    <div id="popup" class="popup">
-        <p id="popup-text"></p>
-        <button onclick="closePopup()">OK</button>
+    <div id="banPopup" class="popup">
+        <p>Enter a note for this ban:</p>
+        <input type="text" id="banNote" placeholder="Enter reason">
+        <button onclick="executeBan()">Confirm</button>
+        <button onclick="closeBanPopup()">Cancel</button>
     </div>
 
     <script>
         const pfpUrl = "https://images-ext-1.discordapp.net/external/fr8u39_DKpUDiozbL0K7iZQBN-ZcQu-q1DA4rGBzfwo/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/530905111145218069/a_be4c10d2c52d94244703d93a17463a24.gif";
         document.getElementById("pfp").src = pfpUrl;
         
-        function login() {
-            const username = document.getElementById("username").value;
-            const code = document.getElementById("password").value;
-            if (code === "420024" && username.trim() !== "") {
-                document.querySelector(".login").style.display = "none";
-                document.getElementById("panel").style.display = "block";
-                document.getElementById("userDisplay").innerText = username;
-            } else {
-                alert("Incorrect Code or Username");
-            }
+        let banType = "";
+        function confirmBan(type) {
+            banType = type;
+            document.getElementById("banPopup").style.display = "block";
         }
         
-        function kickUser() {
-            showPopup("This user is not in a game with a staff account.");
-        }
-        
-        function viewLogs() {
+        function executeBan() {
+            const note = document.getElementById("banNote").value;
             const targetUser = document.getElementById("targetUser").value;
-            showPopup(`No logs found for user ${targetUser}`);
+            showPopup(`${banType} applied to ${targetUser} with note: ${note}`);
+            closeBanPopup();
+        }
+        
+        function closeBanPopup() {
+            document.getElementById("banPopup").style.display = "none";
         }
 
         function showPopup(message) {
@@ -162,13 +167,6 @@
         
         function closePopup() {
             document.getElementById("popup").style.display = "none";
-        }
-
-        function logout() {
-            document.querySelector(".login").style.display = "block";
-            document.getElementById("panel").style.display = "none";
-            document.getElementById("username").value = "";
-            document.getElementById("password").value = "";
         }
     </script>
 </body>
