@@ -89,7 +89,7 @@
                 <button class="btn" onclick="confirmBan('affban')">Affiliate Ban (30 days)</button>
             </div>
             <button class="btn" onclick="fakeAction('unban')">Unban User</button>
-            <button class="btn" onclick="fakeAction('kick')">Kick User</button>
+            <button class="btn" onclick="kickUser()">Kick User</button>
             <button class="btn" onclick="fakeAction('logs')">View Logs</button>
             <button class="btn" onclick="fakeAction('chat')">Staff Communication</button>
             <button class="btn" onclick="fakeAction('server')">Server Controls</button>
@@ -132,27 +132,13 @@
             }
         }
         
-        function fakeAction(action, note = "No note provided") {
+        function kickUser() {
             const targetUser = document.getElementById("targetUser").value;
             if (targetUser.trim() === "") {
                 alert("Please enter a username to perform this action.");
                 return;
             }
-            
-            const messages = {
-                "permban": `${targetUser} has been permanently banned. Note: ${note}`,
-                "reportban": `${targetUser} has been banned for reported violations. Note: ${note}`,
-                "affban": `${targetUser} has been banned for 30 days due to affiliate violations. Note: ${note}`,
-                "unban": `${targetUser} has been unbanned successfully.`,
-                "kick": `${targetUser} has been kicked from the server.`,
-                "logs": "Displaying recent staff logs...",
-                "chat": "Accessing staff communication center...",
-                "server": "Opening server control panel...",
-                "report": "Displaying latest user reports..."
-            };
-            
-            document.getElementById("status").innerText = messages[action];
-            document.getElementById("targetUser").value = "";
+            alert("This user is not in a game with a staff account.");
         }
 
         function logout() {
